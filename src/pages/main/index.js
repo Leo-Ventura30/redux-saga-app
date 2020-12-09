@@ -3,9 +3,11 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as FavoriteActions from "../../store/actions/favorites";
-
+import { increment, decrement } from "../../store/actions/count";
 export class Main extends Component {
   static propTypes = {
+    increment: PropTypes.func.isRequired,
+    decrement: PropTypes.func.isRequired,
     addFavoritesRequest: PropTypes.func.isRequired,
     favorites: PropTypes.shape({
       loading: PropTypes.bool,
@@ -57,6 +59,11 @@ export class Main extends Component {
             </li>
           ))}
         </ul>
+        <div>
+          <button onClick={() => this.props.increment()}>+</button>
+          <h1>{this.props.count}</h1>
+          <button onClick={() => this.props.decrement()}>-</button>
+        </div>
       </Fragment>
     );
   }
@@ -64,8 +71,9 @@ export class Main extends Component {
 
 const mapStateToProps = (state) => ({
   favorites: state.favorites,
+  count: state.count,
 });
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(FavoriteActions, dispatch);
+  bindActionCreators({ ...FavoriteActions, increment, decrement }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
